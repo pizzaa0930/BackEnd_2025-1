@@ -3,17 +3,18 @@ package com.example.bcsd;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HelloController {
 
-
-    @GetMapping("/introduce")
-    public String introduce(@RequestParam("name") String name, Model model) {
-        model.addAttribute("name", name);
-        return "introduce";
+    @ResponseBody
+    @GetMapping("/json")
+    public Info json() {
+        Info info = new Info(22,"김성은");
+        return info;
     }
 
     @GetMapping("/hello2")
