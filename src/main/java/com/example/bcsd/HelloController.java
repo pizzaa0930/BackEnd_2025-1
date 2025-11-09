@@ -16,9 +16,13 @@ public class HelloController {
 
     @ResponseBody
     @GetMapping("/{id}")
-    public Info json() {
-        Info info = new Info(22,"김성은");
-        return info;
+    public ResponseEntity<Article> getArticle(@PathVariable int id) {
+        Article article = articleMap.get(id);
+
+        if(article == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
     @GetMapping("/hello2")
