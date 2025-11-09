@@ -5,13 +5,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@RequestMapping("/article")
 public class HelloController {
 
     @ResponseBody
-    @GetMapping("/json")
+    @GetMapping("/{id}")
     public Info json() {
         Info info = new Info(22,"김성은");
         return info;
