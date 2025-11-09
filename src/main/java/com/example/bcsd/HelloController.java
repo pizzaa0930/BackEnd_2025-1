@@ -2,8 +2,6 @@ package com.example.bcsd;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -38,4 +36,19 @@ public class HelloController {
 
         return new ResponseEntity<>(article,HttpStatus.CREATED);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Article> putArticle(
+            @PathVariable int id,
+            @RequestBody Article updated
+    ) {
+        Article existing = articleMap.get(id);
+
+        if (existing == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        existing.setDescription(updated.getDescription());
+        return new ResponseEntity<>(existing, HttpStatus.OK);
+    }
+
 }
