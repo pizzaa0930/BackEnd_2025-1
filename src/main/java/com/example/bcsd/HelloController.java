@@ -50,5 +50,14 @@ public class HelloController {
         existing.setDescription(updated.getDescription());
         return new ResponseEntity<>(existing, HttpStatus.OK);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable int id) {
+        Article removed = articleMap.remove(id);
+
+        if(removed == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
