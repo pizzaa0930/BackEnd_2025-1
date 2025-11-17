@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>자유게시판</title>
+    <style>
+        body { font-family: Arial; width: 600px; margin: 40px auto; }
+        h1 { margin-bottom: 30px; }
+        .post { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #ccc; }
+        .title { font-size: 20px; font-weight: bold; }
+        .meta { font-size: 14px; color: gray; margin-bottom: 10px; }
+        .desc { margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+<h1>자유게시판</h1>
+
+<div th:each="article : ${articles}" class="post">
+
+    <div class="title" th:text="${article.title}">제목</div>
+
+    <div class="meta">
+        <span th:text="'회원' + ${article.authorID}"></span>
+        |
+        <span th:text="${#temporals.format(article.createDay, 'yyyy-MM-dd')}">날짜</span>
+    </div>
+
+    <div class="desc" th:text="${article.description}"></div>
+</div>
+
+</body>
+</html>
