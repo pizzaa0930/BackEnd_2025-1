@@ -5,6 +5,7 @@ import com.example.bcsd.Service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class PostViewController {
@@ -18,9 +19,10 @@ public class PostViewController {
     }
 
     @GetMapping("/posts")
-    public String posts(Model model) {
+    public String posts(@RequestParam(required = false) Long boardId, Model model) {
         model.addAttribute("articles", articleService.getAllArticles());
         model.addAttribute("members", memberService.getAllMembers());
-        return "posts";   // templates/posts.html
+        model.addAttribute("boardId", articleService.getArticlesByBoardId(boardId));
+        return "posts";
     }
 }
