@@ -45,4 +45,11 @@ public class ArticleController {
         articleService.deleteArticle(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping(params = "boardId")
+    public ResponseEntity<List<Article>> getArticlesByBoardId(@RequestParam Long boardId) {
+        List<Article> articles = articleService.getArticlesByBoardId(boardId);
+        return ResponseEntity.ok(articles);
+    }
+
 }

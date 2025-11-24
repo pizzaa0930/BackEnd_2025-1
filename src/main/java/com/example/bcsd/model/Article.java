@@ -1,5 +1,11 @@
 package com.example.bcsd.model;
+import com.example.bcsd.Service.ArticleService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Article {
     private Long id;
