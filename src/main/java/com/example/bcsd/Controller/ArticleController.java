@@ -1,9 +1,8 @@
 package com.example.bcsd.Controller;
 
-import com.example.bcsd.Service.ArticleService;
 import com.example.bcsd.model.Article;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.bcsd.Service.ArticleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,32 +10,39 @@ import java.util.List;
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
-
     private final ArticleService articleService;
 
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }
-    @PostMapping
-    public Article createArticle(@RequestBody Article article) {
-        return articleService.createArticle(article);
-    }
+
     @GetMapping
-    public List<Article> getAllArticles() {
-        return articleService.getAllArticles();
-    }
-    @GetMapping("/{id}")
-    public Article getArticleById(@PathVariable long id) {
-        return articleService.getArticleById(id);
-    }
-    @PutMapping("/{id}")
-    public Article updateArticle(@PathVariable long id, @RequestBody Article article) {
-        article.setId(id);
-        return articleService.updateArticle(article);
-    }
-    @DeleteMapping("/{id}")
-    public void deleteArticleById(@PathVariable long id) {
-        articleService.deleteArticleById(id);
+    public ResponseEntity<List<Article>> getAllArticles() {
+        return ResponseEntity.ok(articleService.getAllArticles());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
+        Article article = articleService.getArticleById(id);
+        return ResponseEntity.ok(article);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createArticle(@RequestBody Article article) {
+        articleService.createArticle(article);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateArticle(@PathVariable Long id, @RequestBody Article article) {
+        article.setId(id);
+        articleService.updateArticle(article);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+        articleService.deleteArticle(id);
+        return ResponseEntity.ok().build();
+    }
 }

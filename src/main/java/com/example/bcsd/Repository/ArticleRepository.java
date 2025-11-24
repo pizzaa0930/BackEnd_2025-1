@@ -1,54 +1,71 @@
 package com.example.bcsd.Repository;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
-
 import com.example.bcsd.model.Article;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class ArticleRepository {
-    private List<Article> articles = new ArrayList<>();
-    private AtomicLong counter = new AtomicLong(0);
+    private final JdbcTemplate jdbcTemplate;
+
+    public ArticleRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    private final RowMapper<Article> articleRowMapper = new RowMapper<Article>() {
+        @Override
+        public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Article article = new Article();
+            article.setId(rs.getLong("id"));
+            article.setAuthorID(rs.getLong("author_id"));
+            article.setBoardID(rs.getLong("board_id"));
+            article.setTitle(rs.getString("title"));
+            article.setContent(rs.getString("content"));
+            article.setCreatedDate(rs.getTimestamp("created_date").toLocalDateTime());
+            article.setModifiedDate(rs.getTimestamp("modified_date").toLocalDateTime());
+            return article;
+        }
+    };
 
     public List<Article> findAll() {
-        return articles;
+        String sql = "SELECT * FROM article";
+        return jdbcTemplate.query(sql, articleRowMapper);
     }
+
     public Article findById(Long id) {
-        for (Article article : articles) {
-            if (article.getId().equals(id)) {
-                return article;
-            }
-        }
-        return null;
+        String sql = "SELECT * FROM article WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, articleRowMapper, id);
     }
-    public Article findByTitle(String title) {
-        for (Article article : articles) {
-            if (article.getTitle().equals(title)) {
-                return article;
-            }
-        }
-        return null;
-    }
+
     public void save(Article article) {
-        if(article.getId() == null) {
-            article.setId(counter.incrementAndGet());
-        }
-        articles.add(article);
+        String sql = "INSERT INTO article (author_id, board_id, title, content, created_date, modified_date) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql,
+                article.getAuthorID(),
+                article.getBoardID(),
+                article.getTitle(),
+                article.getContent(),
+                article.getCreatedDate(),
+                article.getModifiedDate());
     }
+
     public void update(Article article) {
-        for(int i = 0; i<articles.size(); i++) {
-            if(articles.get(i).getId().equals(article.getId())) {
-                articles.set(i, article);
-                return;
-            }
-        }
+        String sql = "UPDATE article SET author_id = ?, board_id = ?, title = ?, content = ?, modified_date = ? WHERE id = ?";
+        jdbcTemplate.update(sql,
+                article.getAuthorID(),
+                article.getBoardID(),
+                article.getTitle(),
+                article.getContent(),
+                article.getModifiedDate(),
+                article.getId());
     }
+
     public void delete(Long id) {
-        Article article = findById(id);
-        if(article != null) {
-            articles.remove(article);
-        }
+        String sql = "DELETE FROM article WHERE id = ?";
+        jdbcTemplate.update(sql, id);
     }
 }

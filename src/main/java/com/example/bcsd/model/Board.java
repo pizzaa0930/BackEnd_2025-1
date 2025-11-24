@@ -2,7 +2,14 @@ package com.example.bcsd.model;
 
 public class Board {
     private Long id;
-    private String BoardTitle;
+    private String name;
+
+    public Board() {}
+
+    public Board(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public  Long getId() {
         return id;
@@ -10,10 +17,6 @@ public class Board {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getBoardTitle() {
-        return BoardTitle;
-    }
-    public void setBoardTitle(String boardTitle) {
-        BoardTitle = boardTitle;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }

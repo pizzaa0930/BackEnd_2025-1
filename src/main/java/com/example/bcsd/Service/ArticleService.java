@@ -1,10 +1,11 @@
 package com.example.bcsd.Service;
 
-import java.util.List;
-
-import com.example.bcsd.Repository.ArticleRepository;
 import com.example.bcsd.model.Article;
+import com.example.bcsd.Repository.ArticleRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ArticleService {
@@ -13,10 +14,7 @@ public class ArticleService {
     public ArticleService(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
-    public Article createArticle(Article article) {
-        articleRepository.save(article);
-        return article;
-    }
+
     public List<Article> getAllArticles() {
         return articleRepository.findAll();
     }
@@ -25,20 +23,18 @@ public class ArticleService {
         return articleRepository.findById(id);
     }
 
-    public Article updateArticle(Article article) {
-        Article existingArticle = articleRepository.findById(article.getId());
-        if (existingArticle == null) {
-            return null;
-        }
-        existingArticle.setTitle(article.getTitle());
-        existingArticle.setDescription(article.getDescription());
-        existingArticle.setCreateDay(article.getCreateDay());
-        existingArticle.setUpdateDay(article.getUpdateDay());
-        existingArticle.setBoardID(article.getBoardID());
-        return existingArticle;
+    public void createArticle(Article article) {
+        article.setCreatedDate(LocalDateTime.now());
+        article.setModifiedDate(LocalDateTime.now());
+        articleRepository.save(article);
     }
 
-    public void deleteArticleById(Long id) {
+    public void updateArticle(Article article) {
+        article.setModifiedDate(LocalDateTime.now());
+        articleRepository.update(article);
+    }
+
+    public void deleteArticle(Long id) {
         articleRepository.delete(id);
     }
 }

@@ -6,61 +6,40 @@ public class Article {
     private Long authorID;
     private Long boardID;
     private String title;
-    private String description;
-    private LocalDateTime createDay;
-    private LocalDateTime updateDay;
+    private String content;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
-    public Article(Long id, Long authorID, Long boardID, String title,
-                   String description) {
+    public Article() {}
+
+    public Article(Long id, Long authorID, Long boardID, String title, String content) {
         this.id = id;
         this.authorID = authorID;
         this.boardID = boardID;
         this.title = title;
-        this.description = description;
-        this.createDay = LocalDateTime.now();
-        this.updateDay = LocalDateTime.now();
+        this.content = content;
+        this.createdDate = LocalDateTime.now();
+        this.modifiedDate = LocalDateTime.now();
     }
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Long getAuthorID() {
-        return authorID;
-    }
-    public void setAuthorID(Long authorID) {
-        this.authorID = authorID;
-}
-public Long getBoardID() {
-        return boardID;
-}
-public void setBoardID(Long boardID) {
-        this.boardID = boardID;
-}
-public String getTitle() {
-        return title;
-}
-public void setTitle(String title) {
-        this.title = title;
 
-}
-public String getDescription() {
-        return description;
-}
-public void setDescription(String description) {
-        this.description = description;
-}
-public LocalDateTime getCreateDay() {
-        return createDay;
-}
-public void setCreateDay(LocalDateTime createDay) {
-        this.createDay = createDay;
-}
-public LocalDateTime getUpdateDay() {
-        return updateDay;
-}
-public void setUpdateDay(LocalDateTime updateDay) {
-        this.updateDay = updateDay;
-}
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getAuthorID() { return authorID; }
+    public void setAuthorID(Long authorID) { this.authorID = authorID; }
+
+    public Long getBoardID() { return boardID; }
+    public void setBoardID(Long boardID) { this.boardID = boardID; }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
+
+    public LocalDateTime getCreatedDate() { return createdDate; }
+    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
+
+    public LocalDateTime getModifiedDate() { return modifiedDate; }
+    public void setModifiedDate(LocalDateTime modifiedDate) { this.modifiedDate = modifiedDate; }
 }
