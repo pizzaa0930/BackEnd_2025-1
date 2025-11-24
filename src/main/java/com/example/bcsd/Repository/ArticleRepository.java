@@ -68,4 +68,10 @@ public class ArticleRepository {
         String sql = "DELETE FROM article WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
+
+    public List<Article> findByBoardId(Long boardId) {
+        String sql = "SELECT * FROM article WHERE board_id = ?";
+        return jdbcTemplate.query(sql, articleRowMapper, boardId);
+    }
+
 }
