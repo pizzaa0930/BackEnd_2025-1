@@ -1,61 +1,46 @@
 package com.example.bcsd.Service;
 
-import com.example.bcsd.Repository.ArticleRepository;
 import com.example.bcsd.Repository.BoardRepository;
 import com.example.bcsd.model.Board;
-import com.example.bcsd.Exception.BoardNotFoundException;
-import com.example.bcsd.Exception.InvalidInputException;
-import com.example.bcsd.Exception.BoardDeleteException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class BoardService {
-    private final BoardRepository boardRepository;
-    private final ArticleRepository articleRepository;
 
-    public BoardService(BoardRepository boardRepository, ArticleRepository articleRepository) {
+    private final BoardRepository boardRepository;
+
+    public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
-        this.articleRepository = articleRepository;
     }
 
-    public List<Board> getAllBoards() {
+    public Board createBoard(String name) {
+        Board board = new Board(name);
+        boardRepository.save(board);
+        return board;
+    }
+
+    public Board findBoard(Long id) {
+        return boardRepository.findById(id);
+    }
+
+    public List<Board> findAllBoards() {
         return boardRepository.findAll();
     }
 
-    public Board getBoardById(Long id) {
-        try {
-            return boardRepository.findById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new BoardNotFoundException(id);
+    public Board updateBoard(Long id, String name) {
+        Board board = boardRepository.findById(id);
+        if (board == null) {
+            throw new RuntimeException("게시판을 찾을 수 없습니다. id=" + id);
         }
+        board.setName(name);
+        return boardRepository.update(board);
     }
 
-    @Transactional
-    public void createBoard(Board board) {
-        if (board == null || board.getName() == null) {
-            throw new InvalidInputException("null값이 존재합니다");
-        }
-        boardRepository.save(board);
-    }
-
-    @Transactional
-    public void updateBoard(Board board) {
-        if (board == null || board.getId() == null || board.getName() == null) {
-            throw new InvalidInputException("null값이 존재합니다");
-        }
-        boardRepository.update(board);
-    }
-
-    @Transactional
     public void deleteBoard(Long id) {
-        List<?> articles = articleRepository.findByBoardId(id);
-        if (!articles.isEmpty()) {
-            throw new BoardDeleteException(id);
-        }
         boardRepository.delete(id);
     }
 }

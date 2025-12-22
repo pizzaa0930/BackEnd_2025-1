@@ -1,7 +1,7 @@
 package com.example.bcsd.Controller;
 
-import com.example.bcsd.model.Board;
 import com.example.bcsd.Service.BoardService;
+import com.example.bcsd.model.Board;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/boards")
 public class BoardController {
+
     private final BoardService boardService;
 
     public BoardController(BoardService boardService) {
@@ -18,26 +19,24 @@ public class BoardController {
 
     @GetMapping
     public ResponseEntity<List<Board>> getAllBoards() {
-        return ResponseEntity.ok(boardService.getAllBoards());
+        return ResponseEntity.ok(boardService.findAllBoards());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Board> getBoardById(@PathVariable Long id) {
-        Board board = boardService.getBoardById(id);
-        return ResponseEntity.ok(board);
+    public ResponseEntity<Board> getBoard(@PathVariable Long id) {
+        return ResponseEntity.ok(boardService.findBoard(id));
     }
 
     @PostMapping
-    public ResponseEntity<Void> createBoard(@RequestBody Board board) {
-        boardService.createBoard(board);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Board> createBoard(@RequestBody Board board) {
+        Board saved = boardService.createBoard(board.getName());
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateBoard(@PathVariable Long id, @RequestBody Board board) {
-        board.setId(id);
-        boardService.updateBoard(board);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Board> updateBoard(@PathVariable Long id, @RequestBody Board board) {
+        Board updated = boardService.updateBoard(id, board.getName());
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")

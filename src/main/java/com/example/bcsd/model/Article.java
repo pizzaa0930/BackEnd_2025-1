@@ -1,51 +1,62 @@
 package com.example.bcsd.model;
-import com.example.bcsd.Service.ArticleService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
+@Entity
+@Table(name = "article")
 public class Article {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long authorID;
-    private Long boardID;
+
+    @Column(name = "author_id", nullable = false)
+    private Long authorId;
+
+    @Column(name = "board_id", nullable = false)
+    private Long boardId;
+
+    @Column(nullable = false, length = 255)
     private String title;
+
+    @Column(nullable = false, length = 2000)
     private String content;
+
+    @Column(name = "created_date", updatable = false)
     private LocalDateTime createdDate;
+
+    @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 
-    public Article() {}
+    protected Article() {}
 
-    public Article(Long id, Long authorID, Long boardID, String title, String content) {
-        this.id = id;
-        this.authorID = authorID;
-        this.boardID = boardID;
+    public Article(Long authorId, Long boardId, String title, String content) {
+        this.authorId = authorId;
+        this.boardId = boardId;
         this.title = title;
         this.content = content;
+    }
+
+    @PrePersist
+    protected void onCreate() {
         this.createdDate = LocalDateTime.now();
         this.modifiedDate = LocalDateTime.now();
     }
 
+    @PreUpdate
+    protected void onUpdate() {
+        this.modifiedDate = LocalDateTime.now();
+    }
+
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getAuthorID() { return authorID; }
-    public void setAuthorID(Long authorID) { this.authorID = authorID; }
-
-    public Long getBoardID() { return boardID; }
-    public void setBoardID(Long boardID) { this.boardID = boardID; }
-
+    public Long getAuthorId() { return authorId; }
+    public Long getBoardId() { return boardId; }
     public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
     public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
     public LocalDateTime getCreatedDate() { return createdDate; }
-    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
-
     public LocalDateTime getModifiedDate() { return modifiedDate; }
-    public void setModifiedDate(LocalDateTime modifiedDate) { this.modifiedDate = modifiedDate; }
+
+    public void setTitle(String title) { this.title = title; }
+    public void setContent(String content) { this.content = content; }
 }

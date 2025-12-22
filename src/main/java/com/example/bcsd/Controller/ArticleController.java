@@ -18,26 +18,30 @@ public class ArticleController {
 
     @GetMapping
     public ResponseEntity<List<Article>> getAllArticles() {
-        return ResponseEntity.ok(articleService.getAllArticles());
+        return ResponseEntity.ok(articleService.findAllArticles());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
-        Article article = articleService.getArticleById(id);
+        Article article = articleService.findArticle(id);
         return ResponseEntity.ok(article);
     }
 
     @PostMapping
-    public ResponseEntity<Void> createArticle(@RequestBody Article article) {
-        articleService.createArticle(article);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Article> createArticle(@RequestBody Article article) {
+        Article saved = articleService.createArticle(
+                article.getAuthorId(),
+                article.getBoardId(),
+                article.getTitle(),
+                article.getContent()
+        );
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateArticle(@PathVariable Long id, @RequestBody Article article) {
-        article.setId(id);
-        articleService.updateArticle(article);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article article) {
+        Article updated = articleService.updateArticle(id, article.getTitle(), article.getContent());
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
@@ -45,11 +49,4 @@ public class ArticleController {
         articleService.deleteArticle(id);
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping(params = "boardId")
-    public ResponseEntity<List<Article>> getArticlesByBoardId(@RequestParam Long boardId) {
-        List<Article> articles = articleService.getArticlesByBoardId(boardId);
-        return ResponseEntity.ok(articles);
-    }
-
 }

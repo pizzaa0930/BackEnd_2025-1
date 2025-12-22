@@ -20,9 +20,12 @@ public class PostViewController {
 
     @GetMapping("/posts")
     public String posts(@RequestParam(required = false) Long boardId, Model model) {
-        model.addAttribute("articles", articleService.getAllArticles());
-        model.addAttribute("members", memberService.getAllMembers());
-        model.addAttribute("boardId", articleService.getArticlesByBoardId(boardId));
+        model.addAttribute("articles", articleService.findAllArticles());
+        model.addAttribute("members", memberService.findAllMembers());
+        if (boardId != null) {
+            model.addAttribute("articlesByBoard", articleService.getArticlesByBoardId(boardId));
+        }
         return "posts";
     }
+
 }
