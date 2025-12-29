@@ -14,8 +14,9 @@ public class Article {
     @Column(name = "author_id", nullable = false)
     private Long authorId;
 
-    @Column(name = "board_id", nullable = false)
-    private Long boardId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
 
     @Column(nullable = false, length = 255)
     private String title;
@@ -29,11 +30,11 @@ public class Article {
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 
-    protected Article() {}
+    protected Article() {
+    }
 
-    public Article(Long authorId, Long boardId, String title, String content) {
+    public Article(Long authorId, String title, String content) {
         this.authorId = authorId;
-        this.boardId = boardId;
         this.title = title;
         this.content = content;
     }
@@ -49,14 +50,43 @@ public class Article {
         this.modifiedDate = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public Long getAuthorId() { return authorId; }
-    public Long getBoardId() { return boardId; }
-    public String getTitle() { return title; }
-    public String getContent() { return content; }
-    public LocalDateTime getCreatedDate() { return createdDate; }
-    public LocalDateTime getModifiedDate() { return modifiedDate; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setTitle(String title) { this.title = title; }
-    public void setContent(String content) { this.content = content; }
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
 }

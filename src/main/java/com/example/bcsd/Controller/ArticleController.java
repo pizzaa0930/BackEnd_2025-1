@@ -1,7 +1,7 @@
 package com.example.bcsd.Controller;
 
-import com.example.bcsd.model.Article;
 import com.example.bcsd.Service.ArticleService;
+import com.example.bcsd.model.Article;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
+
     private final ArticleService articleService;
 
     public ArticleController(ArticleService articleService) {
@@ -23,24 +24,30 @@ public class ArticleController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
-        Article article = articleService.findArticle(id);
-        return ResponseEntity.ok(article);
+        return ResponseEntity.ok(articleService.findArticle(id));
     }
 
     @PostMapping
-    public ResponseEntity<Article> createArticle(@RequestBody Article article) {
-        Article saved = articleService.createArticle(
-                article.getAuthorId(),
-                article.getBoardId(),
-                article.getTitle(),
-                article.getContent()
+    public ResponseEntity<Article> createArticle(@RequestBody ArticleCreateRequest request) {
+        Article article = articleService.createArticle(
+                request.getAuthorId(),
+                request.getBoardId(),
+                request.getTitle(),
+                request.getContent()
         );
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(article);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article article) {
-        Article updated = articleService.updateArticle(id, article.getTitle(), article.getContent());
+    public ResponseEntity<Article> updateArticle(
+            @PathVariable Long id,
+            @RequestBody ArticleUpdateRequest request
+    ) {
+        Article updated = articleService.updateArticle(
+                id,
+                request.getTitle(),
+                request.getContent()
+        );
         return ResponseEntity.ok(updated);
     }
 
