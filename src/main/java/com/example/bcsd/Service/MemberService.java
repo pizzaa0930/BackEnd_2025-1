@@ -19,34 +19,38 @@ public class MemberService {
 
     public Member createMember(String name, String email, String password) {
         Member member = new Member(name, email, password);
-        memberRepository.save(member);
-        return member;
+        return memberRepository.save(member);
     }
 
+    @Transactional(readOnly = true)
     public Member findMember(Long id) {
-        return memberRepository.findById(id);
+        return memberRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("회원을 찾을 수 없습니다. id=" + id)
+                );
     }
 
+    @Transactional(readOnly = true)
     public List<Member> findAllMembers() {
         return memberRepository.findAll();
     }
 
-    public Member updateMember(Long id, String name, String email, String password) {
-        Member member = memberRepository.findById(id);
-        if (member == null) {
-            throw new RuntimeException("회원을 찾을 수 없습니다. id=" + id);
-        }
-        member.setName(name);
-        member.setEmail(email);
-        member.setPassword(password);
-        return memberRepository.update(member);
+    public Member updateMember(Long id, String name, String password) {
+        Member member = findMember(id);
+        member.changeName(name);
+        member.changePassword(password);
+        return member;
     }
 
     public void deleteMember(Long id) {
-        memberRepository.delete(id);
+        memberRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email);
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("회원을 찾을 수 없습니다. email=" + email)
+                );
     }
 }

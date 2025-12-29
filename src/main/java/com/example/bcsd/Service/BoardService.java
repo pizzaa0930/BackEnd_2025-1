@@ -19,28 +19,27 @@ public class BoardService {
 
     public Board createBoard(String name) {
         Board board = new Board(name);
-        boardRepository.save(board);
-        return board;
+        return boardRepository.save(board);
     }
 
+    @Transactional(readOnly = true)
     public Board findBoard(Long id) {
-        return boardRepository.findById(id);
+        return boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시판을 찾을 수 없습니다. id=" + id));
     }
 
+    @Transactional(readOnly = true)
     public List<Board> findAllBoards() {
         return boardRepository.findAll();
     }
 
     public Board updateBoard(Long id, String name) {
-        Board board = boardRepository.findById(id);
-        if (board == null) {
-            throw new RuntimeException("게시판을 찾을 수 없습니다. id=" + id);
-        }
-        board.setName(name);
-        return boardRepository.update(board);
+        Board board = findBoard(id);
+        board.changeName(name);
+        return board;
     }
 
     public void deleteBoard(Long id) {
-        boardRepository.delete(id);
+        boardRepository.deleteById(id);
     }
 }
