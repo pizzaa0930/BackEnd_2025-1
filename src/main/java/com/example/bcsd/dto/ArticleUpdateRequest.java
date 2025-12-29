@@ -1,4 +1,4 @@
-package com.example.bcsd.Controller;
+package com.example.bcsd.dto;
 
 public class ArticleUpdateRequest {
 
