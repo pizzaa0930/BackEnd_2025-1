@@ -19,7 +19,8 @@ public class Member {
     @Column(nullable = false, length = 255)
     private String password;
 
-    protected Member() {}
+    protected Member() {
+    }
 
     public Member(String name, String email, String password) {
         this.name = name;
@@ -43,15 +44,15 @@ public class Member {
         return password;
     }
 
-    public void setName(String name) {
+    public void changeName(String name) {
         this.name = name;
     }
 
-    public void setEmail(String email) {
+    public void changeEmail(String email) {
         this.email = email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void changePassword(String encodedPassword) {
+        this.password = encodedPassword;
     }
 }
