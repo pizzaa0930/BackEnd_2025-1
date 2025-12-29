@@ -1,6 +1,8 @@
 package com.example.bcsd.Controller;
 
 import com.example.bcsd.Service.ArticleService;
+import com.example.bcsd.dto.ArticleCreateRequest;
+import com.example.bcsd.dto.ArticleUpdateRequest;
 import com.example.bcsd.model.Article;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

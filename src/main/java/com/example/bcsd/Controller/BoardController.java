@@ -2,6 +2,8 @@ package com.example.bcsd.Controller;
 
 import com.example.bcsd.Service.BoardService;
 import com.example.bcsd.model.Board;
+import com.example.bcsd.dto.BoardCreateRequest;
+import com.example.bcsd.dto.BoardUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,14 +30,17 @@ public class BoardController {
     }
 
     @PostMapping
-    public ResponseEntity<Board> createBoard(@RequestBody Board board) {
-        Board saved = boardService.createBoard(board.getName());
+    public ResponseEntity<Board> createBoard(@RequestBody BoardCreateRequest request) {
+        Board saved = boardService.createBoard(request.getName());
         return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Board> updateBoard(@PathVariable Long id, @RequestBody Board board) {
-        Board updated = boardService.updateBoard(id, board.getName());
+    public ResponseEntity<Board> updateBoard(
+            @PathVariable Long id,
+            @RequestBody BoardUpdateRequest request
+    ) {
+        Board updated = boardService.updateBoard(id, request.getName());
         return ResponseEntity.ok(updated);
     }
 

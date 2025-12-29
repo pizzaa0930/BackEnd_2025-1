@@ -2,6 +2,8 @@ package com.example.bcsd.Controller;
 
 import com.example.bcsd.Service.MemberService;
 import com.example.bcsd.model.Member;
+import com.example.bcsd.dto.MemberCreateRequest;
+import com.example.bcsd.dto.MemberUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,22 +30,26 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<Member> createMember(@RequestBody Member member) {
+    public ResponseEntity<Member> createMember(
+            @RequestBody MemberCreateRequest request
+    ) {
         Member saved = memberService.createMember(
-                member.getName(),
-                member.getEmail(),
-                member.getPassword()
+                request.getName(),
+                request.getEmail(),
+                request.getPassword()
         );
         return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Member> updateMember(@PathVariable Long id, @RequestBody Member member) {
+    public ResponseEntity<Member> updateMember(
+            @PathVariable Long id,
+            @RequestBody MemberUpdateRequest request
+    ) {
         Member updated = memberService.updateMember(
                 id,
-                member.getName(),
-                member.getEmail(),
-                member.getPassword()
+                request.getName(),
+                request.getPassword()
         );
         return ResponseEntity.ok(updated);
     }
