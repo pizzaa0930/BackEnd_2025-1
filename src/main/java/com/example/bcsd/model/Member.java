@@ -55,4 +55,10 @@ public class Member {
     public void changePassword(String encodedPassword) {
         this.password = encodedPassword;
     }
+
+    public void update(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+
 }

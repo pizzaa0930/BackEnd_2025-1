@@ -1,14 +1,15 @@
 package com.example.bcsd.Service;
 
 import com.example.bcsd.Repository.MemberRepository;
+import com.example.bcsd.dto.MemberCreateRequest;
+import com.example.bcsd.dto.MemberLoginRequest;
+import com.example.bcsd.dto.MemberUpdateRequest;
 import com.example.bcsd.model.Member;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -17,28 +18,28 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Member createMember(String name, String email, String password) {
-        Member member = new Member(name, email, password);
-        return memberRepository.save(member);
-    }
-
-    @Transactional(readOnly = true)
-    public Member findMember(Long id) {
-        return memberRepository.findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("회원을 찾을 수 없습니다. id=" + id)
-                );
-    }
-
-    @Transactional(readOnly = true)
     public List<Member> findAllMembers() {
         return memberRepository.findAll();
     }
 
-    public Member updateMember(Long id, String name, String password) {
+    public Member findMember(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+    }
+
+    public Member createMember(MemberCreateRequest request) {
+        Member member = new Member(
+                request.getName(),
+                request.getEmail(),
+                request.getPassword()
+        );
+        return memberRepository.save(member);
+    }
+
+    public Member updateMember(Long id, MemberUpdateRequest request) {
         Member member = findMember(id);
-        member.changeName(name);
-        member.changePassword(password);
+        member.changeName(request.getName());
+        member.changePassword(request.getPassword());
         return member;
     }
 
@@ -46,11 +47,25 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
-    public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("회원을 찾을 수 없습니다. email=" + email)
-                );
+    public Member login(MemberLoginRequest request) {
+        Member member = memberRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+
+        if (!member.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return member;
+    }
+
+    public Member login(String email, String password) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+
+        if (!member.getPassword().equals(password)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return member;
     }
 }
